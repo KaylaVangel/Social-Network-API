@@ -4,14 +4,14 @@ const UserSchema = new Schema(
     {
         username: {
             type: String,
-            //unique
+            unique: true,
             required: true,
             trim: true
         },
         email: {
             type: String,
             required: true,
-            //unique
+            unique: true,
             //match valid email
         },
         thoughts: [ThoughtSchema], //array of id values referencing thought model (is this correct?)
@@ -32,6 +32,6 @@ UserSchema.virtual('friendCount').get(function(){
 
 
 
-// const User = model('User', UserSchema);
+const User = model('User', UserSchema);
 
-// module.exports = User; not sure if we need this or not yet
+module.exports = User; 

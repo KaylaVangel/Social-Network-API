@@ -4,7 +4,7 @@ const ThoughtSchema = new Schema(
     {
         thoughtText: {
             type: String,
-            //unique
+            unique: true,
             required: true,
             minlength: 1,
             maxlength: 280
@@ -61,3 +61,4 @@ const ReactionSchema = new Schema(
       }
     }
   );
+  //export?
