@@ -12,21 +12,33 @@ const UserSchema = new Schema(
             type: String,
             required: true,
             unique: true,
-            //match valid email
+            match: /.+\@.+\..+/,
         },
-        thoughts: [ThoughtSchema], //array of id values referencing thought model (is this correct?)
-        friends: [UserSchema] //array of id values referenceing the User model
+        //array of id values referencing thought model (is this correct?)
+        thoughts: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Thought'
+            }
+        ],
+        //array of id values referenceing the User model
+        friends: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'User'
+            }
+        ] 
     },
     {
         toJSON: {
-          virtuals: true,
-        //   getters: true
+            virtuals: true,
+           
         },
-        // id: false
-      }
+        id: false
+    }
 );
 
-UserSchema.virtual('friendCount').get(function(){
+UserSchema.virtual('friendCount').get(function () {
     return this.friends.length
 });
 
