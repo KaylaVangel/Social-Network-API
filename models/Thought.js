@@ -1,4 +1,4 @@
-const { Schema, model, Types } = require('mongoose'); //how do you know which to import?//
+const { Schema, model, Types } = require('mongoose'); 
 
 const ThoughtSchema = new Schema(
     {
@@ -12,7 +12,7 @@ const ThoughtSchema = new Schema(
         createdAt: {
             type: Date,
             default: Date.now,
-            get://need to figure out date format
+            get: createdAtTimestamp => new Date(createdAtTimestamp) //need to figure out date format
         },
         reactions: [ReactionSchema], //Array of nested documents created with the reactionSchema
         
@@ -22,7 +22,7 @@ const ThoughtSchema = new Schema(
           virtuals: true,
           getters: true
         },
-        // id: false
+        id: false
       }
 );
 
@@ -52,7 +52,7 @@ const ReactionSchema = new Schema(
       createdAt: {
         type: Date,
         default: Date.now,
-        get: //need to create date
+        get: createdAtTimestamp => new Date(createdAtTimestamp) 
       }
     },
     {
@@ -61,4 +61,9 @@ const ReactionSchema = new Schema(
       }
     }
   );
-  //export?
+  
+
+
+  const Thought = model('Thought', ThoughtSchema);
+
+  module.exports = Thought;
