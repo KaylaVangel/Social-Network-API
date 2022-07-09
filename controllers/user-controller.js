@@ -5,7 +5,7 @@ const { User } = require('../models');
 const userController = {
     //get all users//
     getAllUser(req, res) {
-        User.find({}) //are brackets in brackets bc imported object//
+        User.find({})
             .then(dbUserData => res.json(dbUserData))
             .catch(err => {
                 console.log(err);
@@ -13,9 +13,15 @@ const userController = {
             });
     },
 
-    //get single userby id//
-    getUserId({ params }, res) {
+    //get single userby id and populated thought and friend data//
+    getUserById({ params }, res) {
         User.findOne({ _id: params.id })
+            .populate(
+                'thoughts'
+            )
+            .populate(
+                'friends'
+            )
             .then(dbUserData => {
                 if (!dbUserData) {
                     res.status(404).json({ message: 'No user found with this id!' });
@@ -29,7 +35,7 @@ const userController = {
             });
     },
 
-    //post new user// why dont we need to assign username and email like we did before ? 
+    //post new user// 
     createUser({ body }, res) {
         User.create(body)
             .then(dbUserData => res.json(dbUserData))
@@ -65,9 +71,45 @@ const userController = {
 
 
     // POST to add a new friend to a user's friend list
+    addFriend({ params, body }, res) {
+        User.findOneAndUpdate(
+            { _id: params.userId },
+            { $push: { friends: params.friendId } },
+            { new: false }
+        )
+            .then(dbUserData => {
+                console.log(dbUserData);
+                if (!dbUserData) {
+                    res.status(404).json({ message: 'No User found with this id!' });
+                    return;
+                }
+                res.json(dbUserData);
+            })
+            .catch(err => res.json(err));
+    },
 
     // DELETE to remove a friend from a user's friend list
-
+    removeComment({ params }, res) {
+        Comment.findOneAndDelete({ _id: params.commentId })
+          .then(deletedComment => {
+            if (!deletedComment) {
+              return res.status(404).json({ message: 'No comment with this id!' });
+            }
+            return Pizza.findOneAndUpdate(
+              { _id: params.pizzaId },
+              { $pull: { comments: params.commentId } },
+              { new: true }
+            );
+          })
+          .then(dbPizzaData => {
+            if (!dbPizzaData) {
+              res.status(404).json({ message: 'No pizza found with this id!' });
+              return;
+            }
+            res.json(dbPizzaData);
+          })
+          .catch(err => res.json(err));
+      },
 
 
 
