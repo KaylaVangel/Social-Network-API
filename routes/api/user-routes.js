@@ -20,13 +20,13 @@ router
    
 //api/users/id
 router  
-    route('/:id')
+    .route('/:id')
     //get single userby id and populated thought and friend data//
     .get(getUserById)
-     //put to update a user by its id//
-     .put(updateUser)
-     //delete to remove user by its id//
-     .delete(deleteUser);
+    //put to update a user by its id//
+    .put(updateUser)
+    //delete to remove user by its id//
+    .delete(deleteUser);
  
 ///api/users/:userId/friends/:friendId
 router

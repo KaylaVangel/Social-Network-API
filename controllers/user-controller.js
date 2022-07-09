@@ -89,51 +89,27 @@ const userController = {
     },
 
     // DELETE to remove a friend from a user's friend list
-    removeComment({ params }, res) {
-        Comment.findOneAndDelete({ _id: params.commentId })
-          .then(deletedComment => {
-            if (!deletedComment) {
-              return res.status(404).json({ message: 'No comment with this id!' });
+    removeFriend({ params }, res) {
+        User.findOneAndDelete({ _id: params.friendId })
+          .then(deletedFriend => {
+            if (!deletedFriend) {
+              return res.status(404).json({ message: 'No friend with this id!' });
             }
-            return Pizza.findOneAndUpdate(
-              { _id: params.pizzaId },
-              { $pull: { comments: params.commentId } },
+            return User.findOneAndUpdate(
+              { _id: params.userId },
+              { $pull: { friends: params.friendId } },
               { new: true }
             );
           })
-          .then(dbPizzaData => {
-            if (!dbPizzaData) {
-              res.status(404).json({ message: 'No pizza found with this id!' });
+          .then(dbUserData => {
+            if (!dbUserData) {
+              res.status(404).json({ message: 'No user found with this id!' });
               return;
             }
-            res.json(dbPizzaData);
+            res.json(dbUserData);
           })
           .catch(err => res.json(err));
       },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
