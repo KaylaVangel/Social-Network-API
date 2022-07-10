@@ -1,5 +1,4 @@
-const { Schema, model, Types } = require('mongoose'); //how do you know which to import?//
-
+const { Schema, model} = require('mongoose'); 
 const UserSchema = new Schema(
     {
         username: {
